@@ -1,11 +1,11 @@
 # novnc
-![GitHub](https://img.shields.io/github/license/ole-vi/novnc)
+![GitHub](https://img.shields.io/github/license/treehouses/novnc)
 ### Introduction
 
 noVNC based from treehouses alpine image. About noVNC more can be view [here](https://novnc.com/info.html)
 ### Intallations:
 ```bash
-git clone https://github.com/ole-vi/novnc.git
+git clone https://github.com/treehouses/novnc.git
 cd novnc
 docker build -t novnc .
 ````

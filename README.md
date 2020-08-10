@@ -1,11 +1,15 @@
 # novnc
-
+![GitHub](https://img.shields.io/github/license/ole-vi/novnc)
 ### Introduction
 
-the open source VNC client - it's is both a VNC client JavaScript library as well as an application built on top of that library. noVNC runs well in any modern browser including mobile browsers (iOS and Android). 
-
+noVNC based from treehouses alpine image. About noVNC more can be view [here](https://novnc.com/info.html)
 ### Intallations:
 ```bash
+git clone https://github.com/ole-vi/novnc.git
+cd novnc
 docker build -t novnc .
-docker run -p 6080:6080 -d novnc
 ````
+### Usage:
+- After build the docker image run with
+``docker run -p 6080:6080 -d novnc``
+- Open a browser and navigate to the ``serverip:6080``

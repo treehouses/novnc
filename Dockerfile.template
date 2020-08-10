@@ -1,8 +1,8 @@
-FROM treehouses/alpine:latest
+FROM {{base_image}}
 
 ENV VNC_PORT=5900 \
     NOVNC_PORT=6080 \
-    NOVNC_HOME=/srv/novnc \
+    NOVNC_HOME=/srv/noVNC \
     GET_HOST="ip route | awk '/default/ { print \$3 }'"
 
 RUN apk update && apk add --no-cache git python2 procps && \

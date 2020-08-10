@@ -1,0 +1,51 @@
+sudo: required
+addons:
+  apt:
+    update: true
+    packages:
+      - docker-ce
+services:
+  - docker
+script:
+  - export DOCKER_CLI_EXPERIMENTAL=enabled
+  - source sha_function.sh
+  - alpine_arm_sha=$(get_manifest_sha "treehouses/alpine:latest" "arm")
+  - echo $alpine_arm_sha
+  - alpine_amd64_sha=$(get_manifest_sha "treehouses/alpine:latest" "amd64")
+  - echo $alpine_amd64_sha
+  - alpine_arm64_sha=$(get_manifest_sha "treehouses/alpine:latest" "arm64")
+  - echo $alpine_arm64_sha
+  - novnc_arm_sha=$(get_manifest_sha "treehouses/novnc:latest" "arm")
+  - echo $novnc_arm_sha
+  - novnc_amd64_sha=$(get_manifest_sha "treehouses/novnc" "amd64")
+  - echo $novnc_amd64_sha
+  - novnc_arm64_sha=$(get_manifest_sha "treehouses/novnc" "arm64")
+  - echo $novnc_arm64_sha
+  - flag_arm=$(is_base "treehouses/alpine@"$alpine_arm_sha "treehouses/novnc@"$novnc_arm_sha )
+  - echo $flag_arm
+  - flag_amd64=$(is_base "treehouses/alpine@"$alpine_amd64_sha "treehouses/novnc@"$novnc_amd64_sha )
+  - echo $flag_amd64
+  - flag_arm64=$(is_base "treehouses/alpine@"$alpine_arm64_sha "treehouses/novnc@"$novnc_arm64_sha )
+  - echo $flag_arm64
+  - echo $DOCKERAPIKEY | docker login -u "sevenseas" --password-stdin
+  - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+  - "./docker-build.sh treehouses/alpine:latest arm arm64 amd64"
+  - flag=$(compare "treehouses/alpine@"$alpine_arm_sha "treehouses/novnc@"$novnc_arm_sha "treehouses/alpine@"$alpine_amd64_sha "treehouses/novnc@"$novnc_amd64_sha  "treehouses/alpine@"$alpine_arm64_sha "treehouses/novnc@"$novnc_arm64_sha)
+  - echo $flag
+before_deploy:
+  - tag_time=$(date +%Y%m%d%H%M)
+  - echo $tag_time
+  - tag_latest="latest"
+  - create_manifest treehouses/novnc $tag_latest $tag_time treehouses/novnc-tags:arm treehouses/novnc-tags:arm64 treehouses/novnc-tags:amd64
+  - docker manifest inspect treehouses/novnc:$tag_latest
+  - docker manifest inspect treehouses/novnc:$tag_time
+deploy:
+  - provider: script
+    script: docker manifest push treehouses/novnc:$tag_latest; docker manifest push treehouses/novnc:$tag_time
+    skip_cleanup: true
+    on:
+      all_branches: true
+      condition: "$flag = true"
+env:
+  global:
+    secure: "YK3x5QsD15DR+n3zmauSaU+g9kbpuaSW+LqcQHwtgrPD3aGigaZImereDb3DU4YMSiTNfvK6dJ737RmoK0UMINXxuxbngdvjJ39GYfdJdhrIMEMaeG4iW8swdAuCc+E2UDk/JHYXhFYLdak3hmCliNiJulbCwUKAMv/Qb5vAO+v9+aVHji/jyYTsluHBwQywPOubEYqObXecs+HO5tZCNwGmOKEzMf1OpfUQtr5TqQ1+H5OnRku3f4TwDIyCta4bvmbdG0e0cKbGuUUFYMWotNa/PTd7WxlUsz6zBAJDVWRu9RoxjWgg1Rq6GjB9sEeh5pISQu0s+JqdrQmNw2CP61eBKkZM4KDm51rlXR8J6z2b66pUje15x7Pxoez/DhKprXVHDyS1De6MNnjiTDbYGWydtpdaKpEE69cAsuMMeHZE48nSdOjR9WnG0CeHiWLNuALFYKayv7x2vsdrUs/aGI8zNgPFNmhnbEzKaor6USvJhpl1Dlhz7We5OO+q4M30tBaenoJqwLOoanwLxvvSgzJ0ckEaLAs9iSsHW+BQtcVAisLnBdhNyLB0KXyMcOGz9uU9gUUktl7N1DlytyOuCklyNBHXd46atDPIuyFAPCYob75Vhzjbmfxyt+9nYkjdjgJ1IbLhcF1v3oW1KHUTprKBZzjdBkxfjuW/eUKpB78="

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for i in ${@:2}
+for i in ${@}
 do
     arch=$i
     tag_arch=treehouses/novnc-tags:$arch
@@ -12,7 +12,7 @@ do
     docker tag $tag_arch_time $tag_arch
 done
 
-for i in ${@:2}
+for i in ${@}
 do
     arch=$i   # arm arm64 amd64
     tag_arch=treehouses/novnc-tags:$arch

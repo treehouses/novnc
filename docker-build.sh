@@ -35,20 +35,8 @@ do
 
     if [ -n "$sha" ]; then
             tag_arch=treehouses/novnc-tags:$arch
-            tag_time=$(date +%Y%m%d%H%M)
-            tag_arch_time=treehouses/novnc-tags:$arch-$tag_time
             echo $tag_arch                       #treehouses/novnc-tags:arm-<time>
-            echo $tag_arch_time
             sed "s|{{base_image}}|$base_image|g" Dockerfile.template > Dockerfile.$arch
-            docker build -t $tag_arch_time -f Dockerfile.$arch .
-            docker push $tag_arch_time
-            docker tag $tag_arch_time $tag_arch
+            docker build -t $tag_arch -f Dockerfile.$arch .
     fi
-done
-
-for i in ${@:2}
-do
-    arch=$i   # arm arm64 amd64
-    tag_arch=treehouses/novnc-tags:$arch
-    docker push $tag_arch
 done

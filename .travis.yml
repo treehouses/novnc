@@ -32,21 +32,21 @@ script:
   - "./docker-build.sh treehouses/alpine:latest arm arm64 amd64"
   - flag=$(compare "treehouses/alpine@"$alpine_arm_sha "treehouses/novnc@"$novnc_arm_sha "treehouses/alpine@"$alpine_amd64_sha "treehouses/novnc@"$novnc_amd64_sha  "treehouses/alpine@"$alpine_arm64_sha "treehouses/novnc@"$novnc_arm64_sha)
   - echo $flag
-#before_deploy:
-#  - "./deploy.sh arm arm64 amd64"
-#  - tag_time=$(date +%Y%m%d%H%M)
-#  - echo $tag_time
-#  - tag_latest="latest"
-#  - create_manifest treehouses/novnc $tag_latest $tag_time treehouses/novnc-tags:arm treehouses/novnc-tags:arm64 treehouses/novnc-tags:amd64
-#  - docker manifest inspect treehouses/novnc:$tag_latest
-#  - docker manifest inspect treehouses/novnc:$tag_time
-#deploy:
-#  - provider: script
-#    script: docker manifest push treehouses/novnc:$tag_latest; docker manifest push treehouses/novnc:$tag_time
-#    skip_cleanup: true
-#    on:
-#      all_branches: true
-#      condition: "$flag = true"
+before_deploy:
+  - "./deploy.sh arm arm64 amd64"
+  - tag_time=$(date +%Y%m%d%H%M)
+  - echo $tag_time
+  - tag_latest="latest"
+  - create_manifest treehouses/novnc $tag_latest $tag_time treehouses/novnc-tags:arm treehouses/novnc-tags:arm64 treehouses/novnc-tags:amd64
+  - docker manifest inspect treehouses/novnc:$tag_latest
+  - docker manifest inspect treehouses/novnc:$tag_time
+deploy:
+  - provider: script
+    script: docker manifest push treehouses/novnc:$tag_latest; docker manifest push treehouses/novnc:$tag_time
+    skip_cleanup: true
+    on:
+      all_branches: true
+      condition: "$flag = true"
 env:
   global:
     secure: "KLn/U8QJq0uyuXOwk0/XUNYeO61lTCt7kFNLtt7TPk+ZPNOlDa8ce3T/0kpdizQUuM6YFP6uNWceTBkHdwlof+zknvxY3dGxARpUM5NoUdI7OHr5Tu462/VD4R+tQTwG1E6+5VT3/4eNMSZJqmrRB09HX+BJkiypYZHMpNyY0res4m4W7nw8oRZuNqaQRDYzSAUorIC3e8FH66m39KZrfUP62dZqQiR3WDx5/m3Ukf1uLPAiDU0yNS6IEVsNhT6CUpd6kqNpcI68SWXXwkc8vP02KJ007RLXe4MV/hVwf7ANZJJXHuiagSWpvWnzvXsbwq5BveYhc7n++ORnLwB+RurmOv039ICi8Y8JGd4Z6RFyNh8pJJ8xmkR7Udx/qPHI2Lr7icwgqT2rvwnWk0gLo9NgGC3Epz0COs7oyDc4W1ql+UCLbjH3FcrFzlDkoHxMKULLxCdz2CBRo3L9tNCFqB+lzkuEZQ0aWKZ7fZ2RHPs3Lu4rgIAcOunSdueY7r2b54erxITFQVIuvwplRUGjauAGi7V/2/DUv96S18i7DiyXvYK1wknLgWSljs6PnwC9HfwlcWs3TQw7ICNgr20hO6ZP9k8/PJ9+n5yePdTIBH5IosM+IDyo8JW+UN6F5rf0UhttYqvEeQC15MvKEfSn7aBY8CXbvxbInewxju548VI="

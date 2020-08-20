@@ -34,12 +34,17 @@ is_base (){
     image_sha=$(get_sha $image_repo)
 
     for i in $base_sha; do
+        local found="false"
         for j in $image_sha; do
             if [[ $i = $j ]]; then
-                echo "false"    #false means same base image?
-                return 0
+                found="true"
+                break
             fi
         done
+        if [ $found == "false" ]; then
+            echo "false"
+            return 0
+        fi
     done
     echo "true"
 }
@@ -58,7 +63,7 @@ compare (){
     result_arm=$(is_base $1 $2)
     result_arm64=$(is_base $3 $4)
     result_amd64=$(is_base $5 $6)
-    if [ $result_arm == "true" ] || [ $result_amd64 == "true" ] || [ $result_arm64 == "true" ];     #compare alpine
+    if [ $result_arm == "false" ] || [ $result_amd64 == "false" ] || [ $result_arm64 == "false" ];     #compare alpine
     then
         echo "true"
     else
@@ -67,10 +72,10 @@ compare (){
 }
 
 create_manifest (){
-    local repo=$1           #treehouses/webssh
+    local repo=$1           #treehouses/novnc
     local tag_latest=$2     #latest
     local tag_time=$3       #timetag
-    local tag_arm=$4        #treehouses/webssh-tags:arm
+    local tag_arm=$4        #treehouses/novnc-tags:arm
     local tag_arm64=$5
     local tag_x86=$6
 

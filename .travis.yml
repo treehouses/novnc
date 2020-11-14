@@ -29,16 +29,12 @@ script:
   - echo $flag_arm64
   - echo $DOCKERAPIKEY | docker login -u "sevenseas" --password-stdin
   - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-#  - "./docker-build.sh treehouses/alpine:latest arm arm64 amd64"
   - build_image "treehouses/alpine:latest" arm "treehouses/novnc"
   - build_image "treehouses/alpine:latest" arm64 "treehouses/novnc"
   - build_image "treehouses/alpine:latest" amd64 "treehouses/novnc"
   - flag=$(compare "treehouses/alpine@"$alpine_arm_sha "treehouses/novnc@"$novnc_arm_sha "treehouses/alpine@"$alpine_amd64_sha "treehouses/novnc@"$novnc_amd64_sha  "treehouses/alpine@"$alpine_arm64_sha "treehouses/novnc@"$novnc_arm64_sha)
   - echo $flag
 before_deploy:
-#  - "./deploy.sh arm"
-#  - "./deploy.sh arm64"
-#  - "./deploy.sh amd64"
   - deploy_image "treehouses/novnc" arm
   - deploy_image "treehouses/novnc" arm64
   - deploy_image "treehouses/novnc" amd64

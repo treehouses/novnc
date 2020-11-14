@@ -35,7 +35,6 @@ script:
   - build_image "treehouses/alpine:latest" amd64 "treehouses/novnc"
   - flag=$(compare "treehouses/alpine@"$alpine_arm_sha "treehouses/novnc@"$novnc_arm_sha "treehouses/alpine@"$alpine_amd64_sha "treehouses/novnc@"$novnc_amd64_sha  "treehouses/alpine@"$alpine_arm64_sha "treehouses/novnc@"$novnc_arm64_sha)
   - echo $flag
-  - flag=False
 before_deploy:
 #  - "./deploy.sh arm"
 #  - "./deploy.sh arm64"

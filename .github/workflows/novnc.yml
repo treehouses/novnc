@@ -5,9 +5,9 @@ on:
   schedule:
     - cron: '0 */8 * * *'
 
-# jobs: 
-  # apache-docker-image-build:
-    # runs-on: ubuntu-latest
+jobs: 
+  apache-docker-image-build:
+    runs-on: ubuntu-latest
 # 
     # steps:
       # - name: Checkout

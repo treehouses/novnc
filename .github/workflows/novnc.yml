@@ -8,17 +8,17 @@ on:
 jobs: 
   apache-docker-image-build:
     runs-on: ubuntu-latest
-# 
-    # steps:
-      # - name: Checkout
-        # uses: actions/checkout@v2
-      # - name: docker login
-        # run: docker login -u ${{ secrets.DOCKERUSERNAME }} -p ${{ secrets.DOCKERAPIKEY }}
-      # - name: treehouses apache
-        # run: |
-          # export DOCKER_CLI_EXPERIMENTAL=enabled
-          # repo="rjpadilla/apache"
-          # source utils.sh
+ 
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: docker login
+        run: docker login -u ${{ secrets.DOCKERUSERNAME }} -p ${{ secrets.DOCKERAPIKEY }}
+      - name: treehouses apache
+        run: |
+          export DOCKER_CLI_EXPERIMENTAL=enabled
+          repo="rjpadilla/apache"
+          source utils.sh
           # debian_arm_sha=$(get_manifest_sha "treehouses/debian:latest" "arm")
           # echo "debian arm"
           # echo $debian_arm_sha

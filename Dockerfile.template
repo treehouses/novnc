@@ -5,7 +5,7 @@ ENV VNC_PORT=5900 \
     NOVNC_HOME=/srv/noVNC \
     GET_HOST="ip route | awk '/default/ { print \$3 }'"
 
-RUN apk update && apk add --no-cache git python2 procps && \
+RUN apk update && apk add --no-cache git python3 procps && \
     mkdir -p $NOVNC_HOME && \
     wget -qO- https://github.com/novnc/noVNC/archive/v1.2.0.tar.gz | tar xz --strip 1 -C $NOVNC_HOME && \
     chmod +x $NOVNC_HOME/utils/*.sh

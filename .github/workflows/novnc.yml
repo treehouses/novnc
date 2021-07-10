@@ -68,8 +68,8 @@ jobs:
             docker manifest annotate $repo:$tag2 $repo-tags:arm --arch arm
             docker manifest inspect $repo:$tag2
             docker manifest push $repo:$tag2
-            echo "https://hub.docker.com/r/treehouses/webssh/tags"
-            treehouses feedback "new treehouses/webssh check https://hub.docker.com/r/treehouses/webssh/tags"
+            echo "https://hub.docker.com/r/treehouses/novnc/tags"
+            treehouses feedback "new treehouses/novnc check https://hub.docker.com/r/treehouses/novnc/tags"
           else
             echo "no changes"
           fi
